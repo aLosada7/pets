@@ -1,0 +1,19 @@
+type Query {
+  currentUser: User!
+  pets: [Pet!]!
+}
+type User {
+  id: String!
+  name: String!
+  email: String!
+  avatarUrl: String!
+  createdAt: String!
+  updatedAt: String!
+}
+type Pet {
+  id: String!
+  name: String!
+  handle: String!
+  avatarUrl: String!
+  birth: String!
+}
