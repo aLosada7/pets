@@ -21,7 +21,10 @@ async function main() {
   await db.initDefaults();
   await seedDb(db);
 
-  app.use('/static', express.static(STATIC_ROOT_FOLDER_PATH));
+  app.use(
+    '/static',
+    express.static(STATIC_ROOT_FOLDER_PATH, { maxAge: 31536000 })
+  );
 
   const httpServer = createServer(app);
   const apolloServer = await createApolloServer(db, httpServer, app);

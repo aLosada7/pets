@@ -15,5 +15,6 @@ type Pet {
   name: String!
   handle: String!
   avatarUrl: String!
+  images: [String!]!
   birth: String!
 }
