@@ -1,17 +1,18 @@
-const queryResolver = {
-  currentUser: () => {
-    return {
-      id: '123',
-      name: 'John Doe',
-      email: 'johndoe',
-      coverUrl: 'johndoe@gmail.com',
-      avatarUrl: '',
-      createdAt: '',
-      updatedAt: '',
-    };
+import { AnimalsResolverContext } from '../resolvers';
+import { QueryResolvers } from '../resolvers-types.generated';
+
+const queryResolver: QueryResolvers<AnimalsResolverContext> = {
+  currentUser: (_, __, { db }) => {
+    const [firstUser] = db.getAllUsers();
+    if (!firstUser) {
+      throw new Error(
+        'currentUser was requested, but there are no users in the database'
+      );
+    }
+    return firstUser;
   },
-  pets: () => {
-    return [];
+  pets: (_, __, { db }) => {
+    return db.getAllPets();
   },
 };
 

@@ -15,11 +15,9 @@ export interface DbTweet extends DbEntity {
 }
 
 export interface DbUser extends DbEntity {
-  id: string;
-  avatarUrl: string;
-  handle: string;
   name: string;
-  coverUrl: string;
+  email: string;
+  avatarUrl: string;
 }
 
 export interface DbFavorite extends DbEntity {
@@ -48,12 +46,17 @@ export interface DbTopicTrend {
   quote?: DbTopicTrendQuote;
 }
 export type DbTrend = DbTopicTrend | DbHashtagTrend;
-export interface DbSuggestion {
+export interface DBImage {
+  src: string;
+  alt: string;
+}
+
+export interface DbPet {
   id: string;
   name: string;
-  handle: string;
   avatarUrl: string;
-  reason: string;
+  images: DBImage[];
+  birth: string;
 }
 
 export interface DbSchema {
@@ -61,7 +64,7 @@ export interface DbSchema {
   users: DbUser[];
   favorites: DbFavorite[];
   hashtagTrends: DbHashtagTrend[];
-  suggestions: DbSuggestion[];
+  pets: DbPet[];
   topicTrends: DbTopicTrend[];
   topicTrendQuotes: DbTopicTrendQuote[];
 }
@@ -84,7 +87,7 @@ class Db {
         hashtagTrends: [],
         topicTrends: [],
         topicTrendQuotes: [],
-        suggestions: [],
+        pets: [],
       })
       .write();
   }
@@ -154,8 +157,8 @@ class Db {
     return list;
   }
 
-  getAllSuggestions() {
-    return this.db.get('suggestions').value();
+  getAllPets() {
+    return this.db.get('pets').value();
   }
 
   getFavoritesForTweet(tweetId: string): DbFavorite[] {
@@ -167,15 +170,13 @@ class Db {
   getFavoriteCountForTweet(tweetId: string): number {
     return this.getFavoritesForTweet(tweetId).length;
   }
-  async createSuggestion(
-    trendProps: Pick<DbSuggestion, 'avatarUrl' | 'handle' | 'name' | 'reason'>
-  ): Promise<DbSuggestion> {
-    const suggestions = this.db.get('suggestions');
-    const newSuggestion: DbSuggestion = {
+  async createSuggestion(trendProps: Exclude<DbPet, 'id'>): Promise<DbPet> {
+    const pets = this.db.get('pets');
+    const newSuggestion: DbPet = {
       ...trendProps,
       id: `suggestion-${uuid()}`,
     };
-    await suggestions.push(newSuggestion).write();
+    await pets.push(newSuggestion).write();
     return newSuggestion;
   }
   async createHashtagTrend(

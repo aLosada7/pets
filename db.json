@@ -38,49 +38,12 @@
   ],
   "users": [
     {
-      "name": "Stu Dent",
-      "handle": "student",
+      "name": "Mariagrazia Rizzi",
+      "email": "mariagraziarf@gmail.com",
       "avatarUrl": "http://localhost:3000/static/egg.jpeg",
-      "coverUrl": "http://localhost:3000/static/beach.jpeg",
       "createdAt": "2022-03-23T03:55:59.612Z",
       "updatedAt": "2022-03-23T03:55:59.612Z",
       "id": "user-15a37948-7712-4e0b-a554-2fef33f31697"
-    },
-    {
-      "name": "Mike North",
-      "handle": "michaellnorth",
-      "avatarUrl": "http://localhost:3000/static/mike-north.png",
-      "coverUrl": "http://localhost:3000/static/beach.jpeg",
-      "createdAt": "2022-03-23T03:55:59.612Z",
-      "updatedAt": "2022-03-23T03:55:59.612Z",
-      "id": "user-71dea2f6-be96-4706-bf6a-1e1c470d6db7"
-    },
-    {
-      "name": "Lisa Huang-North",
-      "handle": "LisaHuangNorth",
-      "avatarUrl": "http://localhost:3000/static/lisaychuang.png",
-      "coverUrl": "http://localhost:3000/static/beach.jpeg",
-      "createdAt": "2022-03-23T03:55:59.612Z",
-      "updatedAt": "2022-03-23T03:55:59.612Z",
-      "id": "user-22a58535-53c1-4acd-b762-4160d7d232df"
-    },
-    {
-      "name": "Marc Grabanski",
-      "handle": "1Marc",
-      "avatarUrl": "http://localhost:3000/static/1marc.jpeg",
-      "coverUrl": "http://localhost:3000/static/beach.jpeg",
-      "createdAt": "2022-03-23T03:55:59.612Z",
-      "updatedAt": "2022-03-23T03:55:59.612Z",
-      "id": "user-895b3d36-8bdf-4c29-be10-7a5e7ff3287f"
-    },
-    {
-      "name": "Frontend Masters",
-      "handle": "FrontendMasters",
-      "avatarUrl": "http://localhost:3000/static/fem_logo.png",
-      "coverUrl": "http://localhost:3000/static/beach.jpeg",
-      "createdAt": "2022-03-23T03:55:59.613Z",
-      "updatedAt": "2022-03-23T03:55:59.613Z",
-      "id": "user-16ee50d0-e43c-4e95-8ae7-b02d086785f5"
     }
   ],
   "favorites": [
@@ -158,28 +121,19 @@
   ],
   "topicTrends": [
     {
-      "topic": "Frontend Masters",
-      "tweetCount": 12345,
-      "kind": "topic",
-      "id": "topictrend-4f992d65-e229-48f2-b523-2faba1343f3e"
-    },
-    {
       "topic": "Pointless Suggestions",
       "tweetCount": 999,
       "kind": "topic",
       "id": "topictrend-73f3c816-b1fc-456d-8c45-beb9c657a663"
-    }
-  ],
-  "topicTrendQuotes": [
+    },
     {
       "topic": "Frontend Masters",
       "tweetCount": 12345,
-      "title": "Frontend Masters",
-      "description": "Launch of new full stack TS course",
-      "imageUrl": "http://localhost:3000/static/fem_logo.png",
-      "topicTrendId": "topictrend-4f992d65-e229-48f2-b523-2faba1343f3e",
-      "id": "topictrendquote-43d669bc-885b-4012-a4e6-653e38a6c521"
-    },
+      "kind": "topic",
+      "id": "topictrend-4f992d65-e229-48f2-b523-2faba1343f3e"
+    }
+  ],
+  "topicTrendQuotes": [
     {
       "topic": "Pointless Suggestions",
       "tweetCount": 999,
@@ -188,6 +142,33 @@
       "imageUrl": "http://localhost:3000/static/clippy-logo.jpeg",
       "topicTrendId": "topictrend-73f3c816-b1fc-456d-8c45-beb9c657a663",
       "id": "topictrendquote-d0e1ba0a-fa05-400a-9b94-7403b82ab0f4"
+    },
+    {
+      "topic": "Frontend Masters",
+      "tweetCount": 12345,
+      "title": "Frontend Masters",
+      "description": "Launch of new full stack TS course",
+      "imageUrl": "http://localhost:3000/static/fem_logo.png",
+      "topicTrendId": "topictrend-4f992d65-e229-48f2-b523-2faba1343f3e",
+      "id": "topictrendquote-43d669bc-885b-4012-a4e6-653e38a6c521"
+    }
+  ],
+  "pets": [
+    {
+      "id": "1",
+      "name": "'Alegria",
+      "birth": "2011-10-05T14:48:00.000Z",
+      "avatarUrl": "http://localhost:3000/static/alegria1.jpg",
+      "images": [
+        {
+          "src": "http://localhost:3000/static/alegria1.jpg",
+          "alt": "Alegria 1"
+        },
+        {
+          "src": "http://localhost:3000/static/alegria2.jpg",
+          "alt": "Alegria 2"
+        }
+      ]
     }
   ],
   "suggestions": [
@@ -196,28 +177,28 @@
       "handle": "TypeScript",
       "avatarUrl": "http://localhost:3000/static/ts-logo.png",
       "reason": "Because you follow @MichaelLNorth",
-      "id": "suggestion-4b0f483f-23b2-4bd3-8fa4-a29980325144"
+      "id": "suggestion-7225a6e9-af76-4c51-8175-7fc44a92ed38"
     },
     {
       "name": "jQuery",
       "handle": "jquery",
       "avatarUrl": "http://localhost:3000/static/jquery-logo.jpeg",
       "reason": "Because you follow @FrontendMasters",
-      "id": "suggestion-099c6f09-83af-4c95-937d-8d56b6791b3d"
+      "id": "suggestion-6a0e4f40-6131-43de-af1f-dca7766dd9a9"
     },
     {
       "name": "GitHub",
       "handle": "github",
       "avatarUrl": "http://localhost:3000/static/github-logo.jpeg",
       "reason": "Because you follow @MichaelLNorth",
-      "id": "suggestion-fd8233ad-9e95-4b55-8177-ffffab6aba5e"
+      "id": "suggestion-64018ad1-1f32-43a0-ac9f-eea381487651"
     },
     {
       "name": "Microsoft",
       "handle": "ms",
       "avatarUrl": "http://localhost:3000/static/msft-logo.png",
       "reason": "Because you follow @lisaychuang",
-      "id": "suggestion-456ba8ce-68b4-4253-ad67-12933bd7795f"
+      "id": "suggestion-b11388c5-0fd5-4789-b557-80a68340410e"
     }
   ]
 }

@@ -21,7 +21,7 @@ export async function seedDb(db: Db) {
     );
     await db.write();
   }
-  if (db.getAllSuggestions().length === 0) {
+  if (db.getAllPets().length === 0) {
     await db.createSuggestion({
       name: 'TypeScript Project',
       handle: 'TypeScript',

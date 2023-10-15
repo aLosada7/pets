@@ -13,8 +13,11 @@ type User {
 type Pet {
   id: String!
   name: String!
-  handle: String!
   avatarUrl: String!
-  images: [String!]!
+  images: [Image!]!
   birth: String!
+}
+type Image {
+  src: String!
+  alt: String!
 }
