@@ -3,6 +3,10 @@ import * as ReactDOM from 'react-dom';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import App from './App';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import ErrorPage from './ErrorPage';
+import UserSection from './UserSection';
+import { ThemeProvider, tealTheme } from '@edene/foundations';
 
 const client = new ApolloClient({
   uri: 'http://localhost:3000/graphql',
@@ -35,6 +39,19 @@ if (module.hot) {
   module.hot.accept();
 }
 
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: 'profile',
+    element: <UserSection />,
+    errorElement: <ErrorPage />,
+  },
+]);
+
 ReactDOM.render(
   <ErrorBoundary
     FallbackComponent={ErrorFallback}
@@ -43,7 +60,9 @@ ReactDOM.render(
     }}
   >
     <ApolloProvider client={client}>
-      <App />
+      <ThemeProvider theme={tealTheme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </ApolloProvider>
   </ErrorBoundary>,
   app

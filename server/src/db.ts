@@ -9,8 +9,16 @@ export interface DbEntity {
   deletedAt?: string;
 }
 
-export interface DbTweet extends DbEntity {
-  message: string;
+export interface DbImage {
+  src: string;
+  alt: string;
+}
+
+export interface DbPet extends DbEntity {
+  name: string;
+  avatarUrl: string;
+  birth: string;
+  images: DbImage[];
   userId: string;
 }
 
@@ -21,7 +29,7 @@ export interface DbUser extends DbEntity {
 }
 
 export interface DbFavorite extends DbEntity {
-  tweetId: string;
+  petId: string;
   userId: string;
 }
 
@@ -51,20 +59,18 @@ export interface DBImage {
   alt: string;
 }
 
-export interface DbPet {
+export interface DbBooking {
   id: string;
-  name: string;
-  avatarUrl: string;
-  images: DBImage[];
-  birth: string;
+  pet: string;
+  date: string;
 }
 
 export interface DbSchema {
-  tweets: DbTweet[];
+  pets: DbPet[];
   users: DbUser[];
   favorites: DbFavorite[];
   hashtagTrends: DbHashtagTrend[];
-  pets: DbPet[];
+  bookings: DbBooking[];
   topicTrends: DbTopicTrend[];
   topicTrendQuotes: DbTopicTrendQuote[];
 }
@@ -81,13 +87,13 @@ class Db {
   async initDefaults() {
     return await this.db
       .defaults<DbSchema>({
-        tweets: [],
+        pets: [],
         users: [],
         favorites: [],
+        bookings: [],
         hashtagTrends: [],
         topicTrends: [],
         topicTrendQuotes: [],
-        pets: [],
       })
       .write();
   }
@@ -104,18 +110,21 @@ class Db {
       .find((u) => u.id === id)
       .value();
   }
-  getTweetById(id: string) {
+
+  getPetById(id: string) {
     return this.db
-      .get('tweets')
+      .get('pets')
       .find((t) => t.id === id)
       .value();
   }
-  getUserTweets(userId: string) {
+
+  getUserPets(userId: string) {
     return this.db
-      .get('tweets')
+      .get('pets')
       .filter((t) => t.userId === userId)
       .value();
   }
+
   getUserFavorites(userId: string) {
     return this.db
       .get('favorites')
@@ -123,9 +132,9 @@ class Db {
       .value();
   }
 
-  getAllTweets(): DbTweet[] {
+  getAllPets(): DbPet[] {
     return this.db
-      .get('tweets')
+      .get('pets')
       .sortBy((t) => new Date(t.createdAt).valueOf())
       .reverse()
       .value();
@@ -157,27 +166,29 @@ class Db {
     return list;
   }
 
-  getAllPets() {
-    return this.db.get('pets').value();
+  getAllBookings() {
+    return this.db.get('bookings').value();
   }
 
-  getFavoritesForTweet(tweetId: string): DbFavorite[] {
+  getFavoritesForPet(petId: string): DbFavorite[] {
     return this.db
       .get('favorites')
-      .filter((t) => t.tweetId === tweetId)
+      .filter((t) => t.petId === petId)
       .value();
   }
-  getFavoriteCountForTweet(tweetId: string): number {
-    return this.getFavoritesForTweet(tweetId).length;
+  getFavoriteCountForPet(petId: string): number {
+    return this.getFavoritesForPet(petId).length;
   }
-  async createSuggestion(trendProps: Exclude<DbPet, 'id'>): Promise<DbPet> {
-    const pets = this.db.get('pets');
-    const newSuggestion: DbPet = {
+  async createSuggestion(
+    trendProps: Exclude<DbBooking, 'id'>
+  ): Promise<DbBooking> {
+    const bookings = this.db.get('bookings');
+    const newBooking: DbBooking = {
       ...trendProps,
       id: `suggestion-${uuid()}`,
     };
-    await pets.push(newSuggestion).write();
-    return newSuggestion;
+    await bookings.push(newBooking).write();
+    return newBooking;
   }
   async createHashtagTrend(
     trendProps: Pick<DbHashtagTrend, 'tweetCount' | 'hashtag'>
@@ -218,22 +229,20 @@ class Db {
     return newTrend;
   }
 
-  async createTweet(
-    tweetProps: Pick<DbTweet, 'message' | 'userId'>
-  ): Promise<DbTweet> {
-    const tweets = this.db.get('tweets');
-    const tweet: DbTweet = {
-      ...tweetProps,
+  async createPet(petProps: Pick<DbPet, 'name' | 'userId'>): Promise<DbPet> {
+    const pets = this.db.get('pets');
+    const pet: DbPet = {
+      ...petProps,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      id: `tweet-${uuid()}`,
+      id: `pet-${uuid()}`,
     };
-    await tweets.push(tweet).write();
-    return tweet;
+    await pets.push(pet).write();
+    return pet;
   }
 
   async createUser(
-    userProps: Pick<DbUser, 'name' | 'handle' | 'avatarUrl' | 'coverUrl'>
+    userProps: Pick<DbUser, 'name' | 'email' | 'avatarUrl'>
   ): Promise<DbUser> {
     const users = this.db.get('users');
     const user: DbUser = {
@@ -247,12 +256,12 @@ class Db {
   }
 
   async createFavorite(
-    favoriteProps: Pick<DbFavorite, 'tweetId' | 'userId'>
+    favoriteProps: Pick<DbFavorite, 'petId' | 'userId'>
   ): Promise<DbFavorite> {
     const user = this.getUserById(favoriteProps.userId);
-    const tweet = this.getTweetById(favoriteProps.tweetId);
+    const pet = this.getPetById(favoriteProps.petId);
     if (!user) throw new Error('User does not exist');
-    if (!tweet) throw new Error('Tweet does not exist');
+    if (!pet) throw new Error('Pet does not exist');
     const favorites = this.db.get('favorites');
     const favorite: DbFavorite = {
       ...favoriteProps,
@@ -264,16 +273,16 @@ class Db {
     return favorite;
   }
   async deleteFavorite(
-    favoriteProps: Pick<DbFavorite, 'tweetId' | 'userId'>
+    favoriteProps: Pick<DbFavorite, 'petId' | 'userId'>
   ): Promise<DbFavorite> {
     const user = this.getUserById(favoriteProps.userId);
-    const tweet = this.getTweetById(favoriteProps.tweetId);
+    const tweet = this.getPetById(favoriteProps.petId);
     if (!user) throw new Error('User does not exist');
-    if (!tweet) throw new Error('Tweet does not exist');
+    if (!tweet) throw new Error('Pet does not exist');
     const favorites = this.db.get('favorites');
 
     const deleted = favorites.remove(
-      (f) => f.tweetId === tweet.id && f.userId === user.id
+      (f) => f.petId === tweet.id && f.userId === user.id
     );
 
     await this.db.write();

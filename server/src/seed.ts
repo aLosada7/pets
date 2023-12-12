@@ -21,7 +21,7 @@ export async function seedDb(db: Db) {
     );
     await db.write();
   }
-  if (db.getAllPets().length === 0) {
+  if (db.getAllBookings().length === 0) {
     await db.createSuggestion({
       name: 'TypeScript Project',
       handle: 'TypeScript',
@@ -107,14 +107,14 @@ export async function seedDb(db: Db) {
         message: `@FrontendMasters I'm still having trouble with the login captchas. Am I supposed to take a class before solving this one? http://localhost:3000/static/captcha-4.jpg`,
       }),
     ];
-    await db.createFavorite({ userId: fem.id, tweetId: tweet2.id });
-    await db.createFavorite({ userId: fem.id, tweetId: tweet4.id });
-    await db.createFavorite({ userId: marc.id, tweetId: tweet2.id });
-    await db.createFavorite({ userId: marc.id, tweetId: tweet4.id });
-    await db.createFavorite({ userId: mike.id, tweetId: tweet1.id });
-    await db.createFavorite({ userId: mike.id, tweetId: tweet3.id });
-    await db.createFavorite({ userId: mike.id, tweetId: tweet4.id });
-    await db.createFavorite({ userId: lisa.id, tweetId: tweet2.id });
-    await db.createFavorite({ userId: lisa.id, tweetId: tweet4.id });
+    await db.createFavorite({ userId: fem.id, petId: tweet2.id });
+    await db.createFavorite({ userId: fem.id, petId: tweet4.id });
+    await db.createFavorite({ userId: marc.id, petId: tweet2.id });
+    await db.createFavorite({ userId: marc.id, petId: tweet4.id });
+    await db.createFavorite({ userId: mike.id, petId: tweet1.id });
+    await db.createFavorite({ userId: mike.id, petId: tweet3.id });
+    await db.createFavorite({ userId: mike.id, petId: tweet4.id });
+    await db.createFavorite({ userId: lisa.id, petId: tweet2.id });
+    await db.createFavorite({ userId: lisa.id, petId: tweet4.id });
   }
 }

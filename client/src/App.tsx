@@ -8,36 +8,30 @@ import {
   Row,
   Text,
 } from '@edene/components';
-import { ThemeProvider, tealTheme } from '@edene/foundations';
 import { gql } from '@apollo/client';
-import { useGetCurrentUserQuery } from './generated/graphql';
+import { useGetPetsQuery } from './generated/graphql';
+import ComposePanel from './ComposePanel';
 
-export const GET_CURRENT_USER = gql`
-  query GetCurrentUser {
-    currentUser {
-      id
-      name
-      avatarUrl
-      createdAt
-    }
+export const GET_PETS = gql`
+  query GetPets {
     pets {
       id
       name
+      birth
       images {
         src
         alt
       }
-      birth
     }
   }
 `;
 
 const App: React.FC = () => {
-  const { loading, error, data } = useGetCurrentUserQuery();
+  const { loading, error, data } = useGetPetsQuery();
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!data) return <p>No data.</p>;
-  const { currentUser, pets = [] } = data;
+  const { pets } = data;
 
   const calculateAge = (isoDateString: string) => {
     const birthDate = new Date(isoDateString);
@@ -48,26 +42,30 @@ const App: React.FC = () => {
 
     return age;
   };
+
   return (
-    <ThemeProvider theme={tealTheme}>
-      <Text>{currentUser.name}</Text>
-      <Container>
-        <Row>
-          {pets.map((pet) => (
-            <Col key={pet.id} sm={24} lg={12}>
-              <Card>
-                <CardMedia src={pet.images} />
-                <CardSection>
-                  <Text>
-                    {pet.name}, {calculateAge(pet.birth)}
-                  </Text>
-                </CardSection>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </ThemeProvider>
+    <Container>
+      <ComposePanel
+        currentUser={{
+          id: 'user-15a37948-7712-4e0b-a554-2fef33f31697',
+        }}
+      />
+
+      <Row>
+        {pets.map((pet) => (
+          <Col key={pet.id} sm={24} md={12}>
+            <Card>
+              <CardMedia src={pet.images} />
+              <CardSection>
+                <Text>
+                  {pet.name}, {calculateAge(pet.birth)}
+                </Text>
+              </CardSection>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
 };
 export default App;

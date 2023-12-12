@@ -1,3 +1,5 @@
+import { gql } from '@apollo/client';
+import { useCreateNewPetMutation } from './generated/graphql';
 import {
   faImage,
   faFilm,
@@ -6,22 +8,39 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
+import { GET_PETS } from './App';
+
+export const CREATE_NEW_PET = gql`
+  mutation CreateNewPet($userId: String!, $name: String!) {
+    createPet(userId: $userId, name: $name) {
+      id
+    }
+  }
+`;
 
 export interface ComposePanelProps {
   currentUser: { id: string };
 }
 const ComposePanel: React.FC<ComposePanelProps> = ({ currentUser }) => {
-  function createNewTweet(body: string) {
-    console.log('creating new tweet', { body, currentUser });
-  }
+  const [createNewPet, { error }] = useCreateNewPetMutation();
+  if (error) return <p>Error creating pet!</p>;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const textarea = e.currentTarget.querySelector('textarea');
     if (!textarea) throw new Error('No textarea found');
-    const body = textarea.value;
-    createNewTweet(body);
-    textarea.value = '';
+    const name = textarea.value;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    createNewPet({
+      variables: { userId: currentUser.id, name },
+      refetchQueries: [GET_PETS],
+    })
+      .then(() => {
+        textarea.value = '';
+      })
+      .catch((err: unknown) => {
+        console.error('Problem creating new pet', err);
+      });
   };
   return (
     <div className="new-tweet">

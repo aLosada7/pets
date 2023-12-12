@@ -1,5 +1,6 @@
 import { AnimalsResolverContext } from '../resolvers';
 import { QueryResolvers } from '../resolvers-types.generated';
+import { petTransform } from '../transforms';
 
 const queryResolver: QueryResolvers<AnimalsResolverContext> = {
   currentUser: (_, __, { db }) => {
@@ -11,8 +12,21 @@ const queryResolver: QueryResolvers<AnimalsResolverContext> = {
     }
     return firstUser;
   },
-  pets: (_, __, { db }) => {
-    return db.getAllPets();
+  bookings: (_, __, { db }) => {
+    return [];
+  },
+  pets: (_, __, { db, dbPetCache, dbPetToFavoriteCountMap, dbUserCache }) => {
+    db.getAllUsers().forEach((user) => {
+      dbUserCache[user.id] = user;
+    });
+    db.getAllFavorites().forEach((favorite) => {
+      const count = dbPetToFavoriteCountMap[favorite.petId] || 0;
+      dbPetToFavoriteCountMap[favorite.petId] = count + 1;
+    });
+    return db.getAllPets().map((t) => {
+      dbPetCache[t.id] = t;
+      return petTransform(t);
+    });
   },
 };
 

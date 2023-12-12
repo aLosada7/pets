@@ -23,7 +23,12 @@ export async function createApolloServer(
       schema: SCHEMA,
       resolvers,
     }),
-    context: (): AnimalsResolverContext => ({ db }),
+    context: (): AnimalsResolverContext => ({
+      db,
+      dbPetCache: {},
+      dbPetToFavoriteCountMap: {},
+      dbUserCache: {},
+    }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 

@@ -1,23 +1,53 @@
 type Query {
   currentUser: User!
+  bookings: [Booking!]!
   pets: [Pet!]!
 }
+
+type Mutation {
+  createPet(userId: String!, name: String!): Pet!
+}
+
+type UserStats {
+  petCount: Int!
+}
+
 type User {
   id: String!
   name: String!
   email: String!
-  avatarUrl: String!
+  avatarUrl: String
   createdAt: String!
   updatedAt: String!
+  pets: [Pet!]!
+  stats: UserStats
 }
+
+type Booking {
+  id: String!
+  pet: Pet
+  user: User
+  date: String!
+}
+
+type Image {
+  src: String!
+  alt: String!
+}
+
+type PetStats {
+  favoriteCount: Int!
+}
+
 type Pet {
   id: String!
   name: String!
   avatarUrl: String!
-  images: [Image!]!
   birth: String!
-}
-type Image {
-  src: String!
-  alt: String!
+  images: [Image!]!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  user: User
+  stats: PetStats
 }

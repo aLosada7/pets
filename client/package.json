@@ -27,6 +27,7 @@
         "graphql": "^15.0.0",
         "graphql-tag": "^2.0.0",
         "react-error-boundary": "^3.1.4",
+        "react-router-dom": "^6.20.1",
         "yarn": "^1.22.18"
     },
     "peerDependencies": {

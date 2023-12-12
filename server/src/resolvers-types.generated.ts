@@ -4,6 +4,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -13,35 +14,72 @@ export type Scalars = {
   Float: number;
 };
 
+export type Booking = {
+  __typename?: 'Booking';
+  date: Scalars['String'];
+  id: Scalars['String'];
+  pet?: Maybe<Pet>;
+  user?: Maybe<User>;
+};
+
 export type Image = {
   __typename?: 'Image';
   alt: Scalars['String'];
   src: Scalars['String'];
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  createPet: Pet;
+};
+
+
+export type MutationCreatePetArgs = {
+  name: Scalars['String'];
+  userId: Scalars['String'];
+};
+
 export type Pet = {
   __typename?: 'Pet';
   avatarUrl: Scalars['String'];
   birth: Scalars['String'];
+  createdAt: Scalars['String'];
+  deletedAt?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   images: Array<Image>;
   name: Scalars['String'];
+  stats?: Maybe<PetStats>;
+  updatedAt: Scalars['String'];
+  user?: Maybe<User>;
+};
+
+export type PetStats = {
+  __typename?: 'PetStats';
+  favoriteCount: Scalars['Int'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  bookings: Array<Booking>;
   currentUser: User;
   pets: Array<Pet>;
 };
 
 export type User = {
   __typename?: 'User';
-  avatarUrl: Scalars['String'];
+  avatarUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
+  pets: Array<Pet>;
+  stats?: Maybe<UserStats>;
   updatedAt: Scalars['String'];
+};
+
+export type UserStats = {
+  __typename?: 'UserStats';
+  petCount: Scalars['Int'];
 };
 
 
@@ -113,22 +151,40 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Booking: ResolverTypeWrapper<Booking>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Image: ResolverTypeWrapper<Image>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Pet: ResolverTypeWrapper<Pet>;
+  PetStats: ResolverTypeWrapper<PetStats>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
+  UserStats: ResolverTypeWrapper<UserStats>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Booking: Booking;
   Boolean: Scalars['Boolean'];
   Image: Image;
+  Int: Scalars['Int'];
+  Mutation: {};
   Pet: Pet;
+  PetStats: PetStats;
   Query: {};
   String: Scalars['String'];
   User: User;
+  UserStats: UserStats;
+};
+
+export type BookingResolvers<ContextType = any, ParentType extends ResolversParentTypes['Booking'] = ResolversParentTypes['Booking']> = {
+  date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  pet?: Resolver<Maybe<ResolversTypes['Pet']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ImageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Image'] = ResolversParentTypes['Image']> = {
@@ -137,34 +193,60 @@ export type ImageResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createPet?: Resolver<ResolversTypes['Pet'], ParentType, ContextType, RequireFields<MutationCreatePetArgs, 'name' | 'userId'>>;
+};
+
 export type PetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Pet'] = ResolversParentTypes['Pet']> = {
   avatarUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   birth?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  deletedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   images?: Resolver<Array<ResolversTypes['Image']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  stats?: Resolver<Maybe<ResolversTypes['PetStats']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PetStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PetStats'] = ResolversParentTypes['PetStats']> = {
+  favoriteCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  bookings?: Resolver<Array<ResolversTypes['Booking']>, ParentType, ContextType>;
   currentUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   pets?: Resolver<Array<ResolversTypes['Pet']>, ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  avatarUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  pets?: Resolver<Array<ResolversTypes['Pet']>, ParentType, ContextType>;
+  stats?: Resolver<Maybe<ResolversTypes['UserStats']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserStats'] = ResolversParentTypes['UserStats']> = {
+  petCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
+  Booking?: BookingResolvers<ContextType>;
   Image?: ImageResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Pet?: PetResolvers<ContextType>;
+  PetStats?: PetStatsResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserStats?: UserStatsResolvers<ContextType>;
 };
 
