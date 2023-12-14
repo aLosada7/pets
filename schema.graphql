@@ -6,6 +6,8 @@ type Query {
 
 type Mutation {
   createPet(userId: String!, name: String!): Pet!
+  createFavorite(favorite: FavoriteInput!): Favorite!
+  deleteFavorite(favorite: FavoriteInput!): Favorite!
 }
 
 type UserStats {
@@ -20,6 +22,7 @@ type User {
   createdAt: String!
   updatedAt: String!
   pets: [Pet!]!
+  favorites: [Favorite!]
   stats: UserStats
 }
 
@@ -50,4 +53,17 @@ type Pet {
   deletedAt: String
   user: User
   stats: PetStats
+}
+
+type Favorite {
+  id: String!
+  pet: Pet!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input FavoriteInput {
+  userId: String!
+  petId: String!
 }
