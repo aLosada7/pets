@@ -22,6 +22,20 @@ export type Booking = {
   user?: Maybe<User>;
 };
 
+export type Favorite = {
+  __typename?: 'Favorite';
+  createdAt: Scalars['String'];
+  id: Scalars['String'];
+  pet: Pet;
+  updatedAt: Scalars['String'];
+  user: User;
+};
+
+export type FavoriteInput = {
+  petId: Scalars['String'];
+  userId: Scalars['String'];
+};
+
 export type Image = {
   __typename?: 'Image';
   alt: Scalars['String'];
@@ -30,13 +44,25 @@ export type Image = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createFavorite: Favorite;
   createPet: Pet;
+  deleteFavorite: Favorite;
+};
+
+
+export type MutationCreateFavoriteArgs = {
+  favorite: FavoriteInput;
 };
 
 
 export type MutationCreatePetArgs = {
   name: Scalars['String'];
   userId: Scalars['String'];
+};
+
+
+export type MutationDeleteFavoriteArgs = {
+  favorite: FavoriteInput;
 };
 
 export type Pet = {
@@ -70,6 +96,7 @@ export type User = {
   avatarUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
   email: Scalars['String'];
+  favorites?: Maybe<Array<Favorite>>;
   id: Scalars['String'];
   name: Scalars['String'];
   pets: Array<Pet>;
@@ -153,6 +180,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Booking: ResolverTypeWrapper<Booking>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Favorite: ResolverTypeWrapper<Favorite>;
+  FavoriteInput: FavoriteInput;
   Image: ResolverTypeWrapper<Image>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -168,6 +197,8 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Booking: Booking;
   Boolean: Scalars['Boolean'];
+  Favorite: Favorite;
+  FavoriteInput: FavoriteInput;
   Image: Image;
   Int: Scalars['Int'];
   Mutation: {};
@@ -187,6 +218,15 @@ export type BookingResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type FavoriteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Favorite'] = ResolversParentTypes['Favorite']> = {
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  pet?: Resolver<ResolversTypes['Pet'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ImageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Image'] = ResolversParentTypes['Image']> = {
   alt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   src?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -194,7 +234,9 @@ export type ImageResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createFavorite?: Resolver<ResolversTypes['Favorite'], ParentType, ContextType, RequireFields<MutationCreateFavoriteArgs, 'favorite'>>;
   createPet?: Resolver<ResolversTypes['Pet'], ParentType, ContextType, RequireFields<MutationCreatePetArgs, 'name' | 'userId'>>;
+  deleteFavorite?: Resolver<ResolversTypes['Favorite'], ParentType, ContextType, RequireFields<MutationDeleteFavoriteArgs, 'favorite'>>;
 };
 
 export type PetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Pet'] = ResolversParentTypes['Pet']> = {
@@ -226,6 +268,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  favorites?: Resolver<Maybe<Array<ResolversTypes['Favorite']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pets?: Resolver<Array<ResolversTypes['Pet']>, ParentType, ContextType>;
@@ -241,6 +284,7 @@ export type UserStatsResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type Resolvers<ContextType = any> = {
   Booking?: BookingResolvers<ContextType>;
+  Favorite?: FavoriteResolvers<ContextType>;
   Image?: ImageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Pet?: PetResolvers<ContextType>;

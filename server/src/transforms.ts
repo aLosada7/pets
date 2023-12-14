@@ -1,5 +1,5 @@
-import { Pet, User } from './resolvers-types.generated';
-import { DbPet, DbUser } from './db';
+import { Pet, User, Favorite } from './resolvers-types.generated';
+import { DbPet, DbUser, DbFavorite } from './db';
 
 export const petTransform = (t: DbPet): Omit<Pet, 'user'> => {
   return {
@@ -24,3 +24,13 @@ export const userTransform = (t: DbUser): User => {
     pets: [],
   };
 };
+
+export const favoriteTransform = (
+  t: DbFavorite
+): Omit<Favorite, "user" | "pet"> => {
+  return {
+    id: t.id,
+    createdAt: t.createdAt,
+    updatedAt: t.updatedAt,
+  }
+}
